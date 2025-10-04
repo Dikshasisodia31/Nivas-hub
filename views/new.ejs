@@ -1,0 +1,48 @@
+<% layout("/layout/boilerplate") %>
+
+    <body>
+        <div class="row">
+        <div class="col-8 offset-2">
+        <div class="form-cont">
+            <form method="post" action="/listings" novalidate class="needs-validation">
+                <div><h3 class="mt-2">Create new listings</h3></div>
+                <div class="title-cont input-box">
+                    <label for="title" name="title" class="form-label m-2">Enter title</label><br>
+                    <input name="title" class="form-control m-2" type="text" placeholder="Title" required>
+                </div>
+                <div class="desc-cont input-box">
+                    <label for="desc" name="description" class="form-label m-2">Enter description</label>
+                    <textarea name="description" class=" form-control desc m-2" placeholder="Description"></textarea>
+                </div>
+                <div class="img-cont input-box">
+                    <label for="image" name="image" class="form-label m-2">Enter image url</label>
+                    <input name="image" class="form-control  m-2" type="text" placeholder="image url/link" required>
+                </div>
+                <div class="price-cont input-box">
+                    <label for="price" name="price" class="form-label m-2">Enter price</label>
+                    <input name="price" class="form-control  m-2" type="text" placeholder="price" required>
+                </div>
+                <div class="row">
+                <div class="col">
+                <div class="location-cont input-box">
+                    <label for="location" name="location" class="form-label m-2">Enter location</label>
+                    <input name="location" class="form-control  m-2" type="text" placeholder="location" required>
+                </div>
+                </div>
+                <div class="col">
+                <div class="country-cont input-box">
+                    <label for="country" name="title" class="form-label m-2">Enter country</label>
+                    <input name="country" class="form-control  m-2" type="text" placeholder="country" required>
+                </div>
+                </div>
+                </div>
+                <div>
+                    <button class="btn m-3 text-center">Add</button>
+                </div>
+            </form>
+            </div>
+            </div>
+            </div>
+            <script src="/public/script.js"></script>
+    </body>
+    </html>

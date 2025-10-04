@@ -1,0 +1,48 @@
+<% layout("/layout/boilerplate") %>
+<body>
+    <div class="row offset-2 mt-3">
+        <div class="col-8">
+        <form method="post" action="/listings/<%=data._id%>?_method=PUT" novalidate ="needs-validation">
+            <div>
+               <h2 class="mt-3">Edit your information</h2>
+            </div>
+            <div class="div">
+            <label for="title" class="form-label m-2">Edit title</label>
+            <input name="title" class="form-control m-2" type="text" value=<%=data.title%>>
+            </div>
+    <div>
+        <label for="title" class="form-label m-2">Edit description</label>
+        <textarea name="description" class="form-control m-2"><%=data.description%></textarea>
+    </div>
+    <div>
+        <label for="title" class="form-label m-2">Enter new Image url/link</label>
+        <input name="image" class="form-control m-2" type="text" value=<%=data.image%>>
+    </div>
+    <div>
+        <label for="title" class="form-label m-2">Edit price</label>
+        <input name="price" class="form-control m-2" type="text" value=<%=data.price%>>
+    </div>
+    <div class="row">
+        <div class="col">
+    <div>
+        <label for="title" class="form-label m-2">Edit location</label>
+        <input name="location" class="form-control m-2" type="text" value=<%=data.location%>>
+    </div>
+      </div>
+      <div class="col">
+    <div>
+        <label for="title" class="form-label m-2">Edit country</label>
+        <input name="country" class="form-control m-2" type="text" value=<%=data.country%>>
+    </div>
+    </div>
+    </div>
+    <div>
+        <button class="btn m-3">Edit</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    <script src="/public/script.js"></script>
+</body>
+
+</html>

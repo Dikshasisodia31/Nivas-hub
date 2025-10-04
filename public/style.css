@@ -1,0 +1,71 @@
+body{
+    background-color: azure;
+}
+.navbar-brand{
+    color : red;
+}
+.navbar {
+    height : 70px;
+   
+}
+.fa-brands{
+    color : red;
+    font-size: larger;
+}
+.navbar-nav{
+    color: black;
+    font-weight: 700;
+}
+.container{
+   margin-top: 70px;
+}
+footer{
+    height : 80px;
+    text-align: center;
+}
+.footer-cont{
+    display: flex;
+    gap: 10px;
+    text-align: center;
+}
+.fa-linkedin{
+    width : 10px;
+    height : 10px;
+}
+.card{
+    border: none !important;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+.card-img-top{
+    height: 300px;
+    border-radius: 20px !important;
+}
+.listing-info{
+    text-decoration: none;
+}
+ .form-cont input{
+    border : 2px solid black;
+} 
+ .form-cont textarea{
+    border : 2px solid black;
+} 
+.btn{
+    background-color: red !important;
+    color : white !important;
+} 
+.btn-dark{
+    background-color: black !important;
+     color : white !important;
+}
+.show-title{
+    font-style: italic;
+}
+ .bi-heart {
+  color: gray !important;
+  transition: 0.2s !important;
+}
+.bi-heart:hover ,
+.btn.active .bi-heart {
+  color: red !important;
+}
