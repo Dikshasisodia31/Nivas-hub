@@ -5,6 +5,9 @@ const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override")
 const ejsmate = require("ejs-mate");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 app.set("view engine" , "ejs");
 app.set("views",path.join(__dirname,"views"));
@@ -33,23 +36,75 @@ main().then(()=>{
 
 // sampleListing.save();
 
+app.get("/demouser",async (req,res)=>{
+    let fakeUser = new User({
+        email : "student@gmail.com",
+        username:"delta-student",
+    });
+    let registeredUser = await User.register(fakeUser,"helloworld"); // hello world is our pass it get converted to hash function so that nobody can know what was the original pass is
+    res.send(registeredUser);
+})
+
+app.get("/signup",(req,res)=>{
+    res.render("users/signup",{showsearchbar:false});
+})
+
+app.post("/signup",async(req,res)=>{
+    try{
+       let {username,email,password} = req.body;
+       if(!password){
+         return res.status(400).send("password missing");
+       }
+       const newUser = new User({email,username});
+       const registeredUser = await User.register(newUser,password);
+       console.log(registeredUser);
+       res.redirect("/getlistings");
+    }catch(err){
+         console.log(err);
+         res.status(500).send(err.message);
+    }
+})
+
+app.get("/login",(req,res)=>{
+    res.render("users/login.ejs",{showsearchbar:false});
+})
+
+app.post("/login",
+    passport.authenticate("local",{
+        failureRedirect : "/login",
+        failureFlash:true,
+    }),
+    async(req,res)=>{
+        res.send("Welcome to Wanderlust!You are logged in!");
+    }
+)
+
+app.get("/logout",(req,res,next)=>{
+    req.logout((err)=>{
+        if(err){
+            return next(err);
+        }
+        req.flash("success","you are logged out!");
+        res.redirect("/getlistings",{showsearchbar:false});
+    })
+})
+
 //index route
 app.get("/getlistings",async (req,res)=>{
     let allListings = await Listing.find({});
-    res.render("listing.ejs",{allListings});
+    res.render("listing.ejs",{allListings,showsearchbar:true});
 })
-
 
 //create new route
 app.get("/listings/new",(req,res)=>{
-    res.render("new.ejs");
+    res.render("new.ejs",{showsearchbar:false});
 })
 
 //read request
 app.get("/listings/:id",async(req,res)=>{
     let {id} = req.params;
     let allinfo = await Listing.findById(id);
-    res.render("show.ejs",{allinfo});
+    res.render("show.ejs",{allinfo,showsearchbar:false});
 })
 
 //add new info
@@ -64,14 +119,14 @@ app.post("/listings",async (req,res)=>{
         country : country,
     });
     await newListing.save();
-    res.redirect("/getlistings");
+    res.redirect("/getlistings",{showsearchbar:true});
 })
 
 //edit route
 app.get("/listings/:id/edit",async (req,res)=>{
     const {id} = req.params;
     let data = await Listing.findById(id);
-    res.render("edit.ejs",{data});
+    res.render("edit.ejs",{data,showsearchbar:false});
 })
 
 //update route
@@ -94,7 +149,8 @@ app.delete("/listings/:id",async (req,res)=>{
 })
 
 app.get("/",(req,res)=>{
-    res.send("everything is fine");
+    res.redirect("/getlistings",{showsearchbar:true});
+    // res.send("everything is fine");
 })
 app.listen(8080,(req,res)=>{
     console.log("app is listening");
