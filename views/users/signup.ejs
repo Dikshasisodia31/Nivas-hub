@@ -1,0 +1,24 @@
+<% layout("/layout/boilerplate") %>
+<div class="row mt-5 border-0 rounded-3 position-relative ">
+    <h2 class="text-center mt-5">Welcome to NivasHub</h2>
+    <!-- <h3 class="text-center mt-5">Sign up on NivasHub</h3> -->
+    <div class="container col-6 offset-3 ">
+         <form action="/signup" method="post" novalidate class="needs-validation">
+              <div class="mb-3 mt-5">
+                <div class="title-cont input-box">
+                    <label for="username" name="username">Username</label><br>
+                    <input name="username" class="form-control m-2" type="text"required>
+                </div>
+                <div class="title-cont input-box">
+                    <label for="email" name="email">E-mail</label><br>
+                    <input name="email" class="form-control m-2" type="email"required>
+                </div>
+                <div class="title-cont input-box">
+                    <label for="password" name="password">Password</label><br>
+                    <input name="password" class="form-control m-2" type="password"required>
+                </div>
+                <button class="btn btn-success mt-3 mb-3">Sign up</button>
+              </div>
+         </form>
+    </div>
+</div>
