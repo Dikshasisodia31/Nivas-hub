@@ -5,19 +5,19 @@
         <button>Add new location</button>
     </form> -->
     <div class="container mt-5">
-    <div class="row row-cols-lg-3 mt-5">
-            <% for(let listing of allListings){ %>
-                <a href="/listings/<%=listing.id%>" class="listing-info">
-                <div class="card" style="width: 25rem;">
-                    <img src="<%= listing.image.url %>"
-                     class="card-img-top" 
-                     alt="height : 200px">
-                    <div><h4><%= listing.title %></h4></div>
-                    <div>Rs. <%= listing.price %>/night</div>
-                </div>
-                </a>
-                <% } %>
-                </div>
-                </div>
+       <div class="row row-cols-lg-3 mt-5">
+          <% for(let listing of allListings){ %>
+            <a href="/listings/<%=listing.id%>" class="listing-info">
+            <div class="card listings" style="width: 25rem;">
+                <img src="<%= listing.image.url %>"
+                class="card-img-top listings" 
+                alt="height : 200px">
+                <div><h4><%= listing.title %></h4></div>
+                <div>Rs. <%= listing.price %>/night</div>
+            </div>
+            </a>
+         <% } %>
+       </div>
+    </div>
     </body>
     </html>
