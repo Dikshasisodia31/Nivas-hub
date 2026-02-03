@@ -1,23 +1,51 @@
 body{
+    padding-top: 60px;
     background-color: azure;
 }
 .navbar-brand{
     color : red;
+ 
 }
 .navbar {
-    height : 70px;
-   
+    height:70px;
+    background: rgba(255, 255, 255, 0.8); /* semi-transparent white */
+    backdrop-filter: blur(10px);          /* adds the blur effect */
+   -webkit-backdrop-filter: blur(10px);  /* for Safari support */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* soft shadow */
+}
+.search-bar{
+    background: rgba(255, 255, 255);
+    border-radius: 50px;
+    max-width: 1000px;
+    margin-left : 300px;
+    /* margin-right : 200px; */
+}
+a{
+    text-decoration: none;
 }
 .fa-brands{
     color : red;
+    font-weight: bolder;
     font-size: larger;
+}
+.logo-name{
+    text-decoration: none;
+    color: red;
+    font-size: larger;
+    font-weight: bolder;
 }
 .navbar-nav{
     color: black;
-    font-weight: 700;
+    font-weight: 500;
 }
-.container{
+.signup-container{
    margin-top: 70px;
+   display:flex;
+   flex-direction: row;
+   height:400px;
+   width:400px;
+   justify-content: center;
+   align-items: center;
 }
 footer{
     height : 80px;
@@ -31,6 +59,9 @@ footer{
 .fa-linkedin{
     width : 10px;
     height : 10px;
+}
+.listings:hover{
+   transition: transform 0.3s ease;
 }
 .card{
     border: none !important;
@@ -54,6 +85,11 @@ footer{
     background-color: red !important;
     color : white !important;
 } 
+.btn-success{
+    border-radius: 2px !important;
+    background-color: rgb(30, 166, 30) !important;
+    color : white !important;
+}
 .btn-dark{
     background-color: black !important;
      color : white !important;
