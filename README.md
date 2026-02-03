@@ -24,3 +24,14 @@ A Web project (Node.js,Express.js,EJS,MongoDB) application that allow users to b
 - VS code
 - Passport
 
+## Screenshots 📸📸
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Details Page
+![Detail Page](screenshots/listings.png)
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+⭐More screenshots are available in screenshot folder
