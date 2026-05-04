@@ -34,4 +34,5 @@ A Web project (Node.js,Express.js,EJS,MongoDB) application that allow users to b
 ### Login Page
 ![Login Page](screenshots/login.png)
 
+![others](screenshots/secure.png)
 ⭐More screenshots are available in screenshot folder
