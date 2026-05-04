@@ -2,14 +2,14 @@
 
 A Web project (Node.js,Express.js,EJS,MongoDB) application that allow users to browse listings, view property details , includes user authentication and responsive UI.
 
-## Features 
-- User Authentication (Login/Signup)
+## Features  
+- User Authentication with Passport.js
+- Session-based login and encrypted password storage
 - CRUD Operations
 - Responsive UI
 - Secure password handling
 
 ## Tech Stack
-
 ### Frontend
 - HTML5, CSS3, Bootstrap, EJS
 
