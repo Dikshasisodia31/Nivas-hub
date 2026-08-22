@@ -11,11 +11,13 @@ const path = require("path");
 const methodOverride = require("method-override")
 const ejsmate = require("ejs-mate");
 const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+
+const dbUrl = process.env.MONGO_URL;
 
 app.set("view engine" , "ejs");
 app.set("views",path.join(__dirname,"views"));
@@ -26,7 +28,8 @@ app.engine("ejs",ejsmate);
 passport.use(new LocalStrategy.Strategy(User.authenticate()));
 
 const store = new MongoStore({
-  mongoUrl: "mongodb://localhost:27017/Nivas",
+//   mongoUrl: "mongodb://localhost:27017/Nivas",
+  mongoUrl : dbUrl,
   crypto: {
     secret: process.env.SESSION_SECRET,
   },
@@ -44,6 +47,7 @@ const sessionOptions = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    secure : process.env.NODE_ENV === "production",
   },
 };
 
@@ -55,7 +59,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/Nivas');
+//   await mongoose.connect('mongodb://localhost:27017/Nivas');
+     await mongoose.connect(dbUrl);
 }
 
 main().then(()=>{
@@ -197,13 +202,19 @@ app.put("/listings/:id",isLoggedIn,async (req,res)=>{
 app.delete("/listings/:id",isLoggedIn,async (req,res)=>{
     let {id} = req.params;
     await Listing.findByIdAndDelete(id);
-    res.redirect("/getListings");
+    res.redirect("/getlistings");
 })
 
 app.get("/",(req,res)=>{
     res.redirect("/getlistings",{showsearchbar:true});
     // res.send("everything is fine");
 })
+
+
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send("Something went wrong");
+;})
 
 app.listen(PORT,(req,res)=>{
     console.log("app is listening");
