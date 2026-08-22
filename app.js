@@ -11,7 +11,7 @@ const path = require("path");
 const methodOverride = require("method-override")
 const ejsmate = require("ejs-mate");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -28,9 +28,8 @@ app.engine("ejs",ejsmate);
 passport.use(new LocalStrategy.Strategy(User.authenticate()));
 
 const store = new MongoStore({
-//   mongoUrl: "mongodb://localhost:27017/Nivas",
-  mongoUrl : dbUrl,
-  crypto: {
+   mongoUrl : dbUrl,
+   crypto: {
     secret: process.env.SESSION_SECRET,
   },
   touchAfter: 24 * 3600,
@@ -59,7 +58,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 async function main() {
-//   await mongoose.connect('mongodb://localhost:27017/Nivas');
      await mongoose.connect(dbUrl);
 }
 
