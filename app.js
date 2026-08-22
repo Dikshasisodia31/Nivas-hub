@@ -1,12 +1,20 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
+const PORT = process.env.PORT || 8080;
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override")
 const ejsmate = require("ejs-mate");
+const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
+const flash = require("connect-flash");
 const passport = require("passport");
-const localStrategy = require("passport-local");
+const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
 app.set("view engine" , "ejs");
@@ -15,6 +23,36 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsmate);
+passport.use(new LocalStrategy.Strategy(User.authenticate()));
+
+const store = new MongoStore({
+  mongoUrl: "mongodb://localhost:27017/Nivas",
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+  console.error("Session store error:", err);
+});
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  },
+};
+
+// CONNECT-SESSION
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/Nivas');
@@ -25,6 +63,15 @@ main().then(()=>{
 }).catch(err => {
     console.log(err);
 })
+
+//FLASH 
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
+
+    next();
+});
 
 // let sampleListing = new Listing({
 //     title : "My dream home",
@@ -64,7 +111,13 @@ app.post("/signup",async(req,res)=>{
          res.status(500).send(err.message);
     }
 })
-
+function isLoggedIn(req,res,next){
+    if(!req.isAuthenticated()){
+       req.flash("error","You must be logged in before making any changes");
+       return res.redirect("/login");
+    }
+    next();
+}
 app.get("/login",(req,res)=>{
     res.render("users/login.ejs",{showsearchbar:false});
 })
@@ -75,7 +128,7 @@ app.post("/login",
         failureFlash:true,
     }),
     async(req,res)=>{
-        res.send("Welcome to Wanderlust!You are logged in!");
+        res.redirect("/getlistings");
     }
 )
 
@@ -84,7 +137,6 @@ app.get("/logout",(req,res,next)=>{
         if(err){
             return next(err);
         }
-        req.flash("success","you are logged out!");
         res.redirect("/getlistings",{showsearchbar:false});
     })
 })
@@ -96,7 +148,7 @@ app.get("/getlistings",async (req,res)=>{
 })
 
 //create new route
-app.get("/listings/new",(req,res)=>{
+app.get("/listings/new",isLoggedIn,(req,res)=>{
     res.render("new.ejs",{showsearchbar:false});
 })
 
@@ -108,13 +160,13 @@ app.get("/listings/:id",async(req,res)=>{
 })
 
 //add new info
-app.post("/listings",async (req,res)=>{
+app.post("/listings",isLoggedIn,async (req,res)=>{
     let {title , description,image ,price,location,country} = req.body;
     let newListing = new Listing({
         title : title,
         description : description,
         image : image,
-        prrice : price,
+        price : price,
         location : location,
         country : country,
     });
@@ -123,14 +175,14 @@ app.post("/listings",async (req,res)=>{
 })
 
 //edit route
-app.get("/listings/:id/edit",async (req,res)=>{
+app.get("/listings/:id/edit",isLoggedIn,async (req,res)=>{
     const {id} = req.params;
     let data = await Listing.findById(id);
     res.render("edit.ejs",{data,showsearchbar:false});
 })
 
 //update route
-app.put("/listings/:id",async (req,res)=>{
+app.put("/listings/:id",isLoggedIn,async (req,res)=>{
     const {id} = req.params;
     let { title, description, image, price, location, country } = req.body;
     await Listing.findByIdAndUpdate(id,{title : title,
@@ -142,7 +194,7 @@ app.put("/listings/:id",async (req,res)=>{
     res.redirect(`/listings/${id}`);
 })
 
-app.delete("/listings/:id",async (req,res)=>{
+app.delete("/listings/:id",isLoggedIn,async (req,res)=>{
     let {id} = req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect("/getListings");
@@ -152,6 +204,7 @@ app.get("/",(req,res)=>{
     res.redirect("/getlistings",{showsearchbar:true});
     // res.send("everything is fine");
 })
-app.listen(8080,(req,res)=>{
+
+app.listen(PORT,(req,res)=>{
     console.log("app is listening");
 })
